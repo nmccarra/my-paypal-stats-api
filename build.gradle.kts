@@ -25,10 +25,12 @@ java {
 
 object V {
     const val kotlin  = "1.3.72"
-    const val fuel = "2.3.0"
+    const val fuel = "2.2.0"
     const val config = "1.4.1"
     const val jackson = "2.10.4"
     const val kotlinLogging = "1.7.8"
+    const val mockk = "1.9.3"
+    const val mockServer = "3.10.8"
 }
 
 dependencies {
@@ -40,7 +42,11 @@ dependencies {
     implementation("com.typesafe:config:${V.config}")
     implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:${V.jackson}")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${V.jackson}")
+    implementation("org.junit.jupiter:junit-jupiter:5.4.2")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.mock-server:mockserver-netty:${V.mockServer}")
+    testImplementation("org.mock-server:mockserver-client-java:${V.mockServer}")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
@@ -52,4 +58,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }

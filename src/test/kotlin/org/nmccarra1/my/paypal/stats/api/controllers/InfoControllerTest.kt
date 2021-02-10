@@ -13,12 +13,12 @@ import org.springframework.test.web.servlet.get
 @SpringBootTest
 @AutoConfigureMockMvc
 internal class InfoControllerTest @Autowired constructor(
-    private val mockMvc: MockMvc
+    val mockMvc: MockMvc
 ) {
     @Test
     fun `should return configuration`() {
         val expectedPaypalApi = PaypalApi(
-            url = "https://api-m.paypal.com",
+            url = "http://localhost:1080",
             transactionsPath = "v1/reporting/transactions",
             tokenPath = "v1/oauth2/token")
 
