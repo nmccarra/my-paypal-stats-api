@@ -4,8 +4,8 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.*
 import org.mockserver.integration.ClientAndServer
-import org.nmccarra1.my.paypal.stats.api.controllers.MockPaypalApiRequests.oauth2TokenSuccess
-import org.nmccarra1.my.paypal.stats.api.controllers.MockPaypalApiRequests.oauth2TokenUnauthorised
+import org.nmccarra1.my.paypal.stats.api.controllers.MockOauth2TokenRequests.oauth2TokenSuccess
+import org.nmccarra1.my.paypal.stats.api.controllers.MockOauth2TokenRequests.oauth2TokenUnauthorised
 import org.nmccarra1.my.paypal.stats.api.models.AccessTokenCredentials
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc

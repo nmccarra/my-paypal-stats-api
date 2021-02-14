@@ -16,6 +16,7 @@ class PaypalAPIClientService (
 ) {
     private val config: Configuration = configService.configuration
     private val tokenURL = "${config.paypalApi.url}/${config.paypalApi.tokenPath}"
+    private val transactionsURL = "${config.paypalApi.url}/${config.paypalApi.transactionsPath}"
 
     fun getAccessToken(credentials: AccessTokenCredentials): ResponseEntity<AccessTokenResponse> {
         val (_, httpResponse, apiResult) = Fuel.post(tokenURL)
@@ -31,6 +32,26 @@ class PaypalAPIClientService (
             failure = {
                 logger.error { "${httpResponse.statusCode} ${httpResponse.responseMessage} - api/token: ${UNAUTHORIZED_ACCESS_TOKEN.error}" }
                 throw UnauthorisedException()
+            }
+        )
+        return ResponseEntity(payload, HttpStatus.valueOf(httpResponse.statusCode))
+    }
+
+    fun getTransactionsWithAccessToken(transactionsRequestWithAccessToken:
+                                       TransactionsRequestWithAccessToken) : ResponseEntity<List<TransactionsSearchParsedResponse?>> {
+        val (_, httpResponse, apiResult) = Fuel.get(transactionsURL, transactionsRequestWithAccessToken.parameterPairList())
+            .header(mapOf("Content-Type" to "application/json"))
+            .authentication()
+            .bearer(transactionsRequestWithAccessToken.accessToken)
+            .responseObject(TransactionsSearchResponseDeserializer)
+        val payload = apiResult.fold(
+            success = {
+                it.toPaypalTransactionSearchParsedResponse()
+            },
+            failure = {
+                // TODO: Add Error handling
+                logger.error { it.exception }
+                throw Exception()
             }
         )
         return ResponseEntity(payload, HttpStatus.valueOf(httpResponse.statusCode))

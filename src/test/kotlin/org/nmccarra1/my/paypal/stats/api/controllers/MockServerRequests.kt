@@ -3,9 +3,10 @@ package org.nmccarra1.my.paypal.stats.api.controllers
 import org.mockserver.integration.ClientAndServer
 import org.mockserver.model.HttpRequest
 import org.mockserver.model.HttpResponse
+import org.mockserver.model.Parameter
 import java.util.concurrent.TimeUnit
 
-object MockPaypalApiRequests {
+object MockOauth2TokenRequests {
 
     fun oauth2TokenSuccess(clientAndServer: ClientAndServer, tokenValue: String = "TOKEN") {
         clientAndServer.`when`(
@@ -40,4 +41,29 @@ object MockPaypalApiRequests {
                 .withDelay(TimeUnit.NANOSECONDS, 1)
         )
     }
+}
+
+object MockTransactionSearchRequests {
+
+    fun transactionSearchSuccess(clientAndServer: ClientAndServer) {
+        clientAndServer.`when`(
+            HttpRequest.request()
+                .withMethod("GET")
+                .withPath("/v1/reporting/transactions")
+                .withHeader("Content-Type", "application/json")
+                .withHeader("Authorization", "Bearer success_access_token")
+                .withQueryStringParameters(
+                    Parameter("fields", "all"),
+                    Parameter("start_date", "2021-02-01T00:00:00-00:00"),
+                    Parameter("end_date", "2021-02-13T23:59:59-00:00")
+                )
+        ).respond(
+            HttpResponse.response()
+                .withStatusCode(200)
+                .withHeader("\"Content-type\", \"application/json\"")
+                .withBody(MockTransactionSearchRequests::class.java.getResource("/transaction_search_response.json").readText())
+                .withDelay(TimeUnit.NANOSECONDS, 1)
+        )
+    }
+
 }

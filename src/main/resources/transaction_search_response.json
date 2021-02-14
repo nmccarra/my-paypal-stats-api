@@ -1,0 +1,146 @@
+{
+  "transaction_details": [
+{
+  "transaction_info": {
+    "paypal_account_id": "POPOKFREKP33",
+    "transaction_id": "MDFEKWLQFE3323",
+    "paypal_reference_id": "DFEWMKLFDWEK223",
+    "paypal_reference_id_type": "PAP",
+    "transaction_event_code": "T0003",
+    "transaction_initiation_date": "2021-02-02T12:21:14+0000",
+    "transaction_updated_date": "2021-02-02T12:21:14+0000",
+    "transaction_amount": {
+      "currency_code": "EUR",
+      "value": "-9.83"
+    },
+    "transaction_status": "S",
+    "ending_balance": {
+      "currency_code": "EUR",
+      "value": "-9.83"
+    },
+    "available_balance": {
+      "currency_code": "EUR",
+      "value": "-9.83"
+    },
+    "invoice_id": "1221111EEWWEW",
+    "custom_field": "IE",
+    "protection_eligibility": "02"
+  },
+  "payer_info": {
+    "account_id": "QQQWWWEELLL22",
+    "email_address": "premium-gbp@spotify.com",
+    "phone_number": {
+      "country_code": "353",
+      "national_number": "1222333"
+    },
+    "address_status": "N",
+    "payer_status": "Y",
+    "payer_name": {
+      "alternate_full_name": "Spotify Finance Limited"
+    },
+    "country_code": "mock_country_code",
+    "address": {
+      "line1": "mock_line1",
+      "line2": "mock_line2",
+      "city": "mock_city",
+      "country_code": "mock_country_code",
+      "postal_code": "mock_postal_code"
+    }
+  },
+  "shipping_info": {
+    "name": "mock_name"
+  },
+  "cart_info": {
+    "item_details": [
+      {
+        "item_quantity": "1",
+        "item_unit_price": {
+          "currency_code": "EUR",
+          "value": "9.83"
+        },
+        "item_amount": {
+          "currency_code": "EUR",
+          "value": "9.83"
+        },
+        "total_item_amount": {
+          "currency_code": "EUR",
+          "value": "9.83"
+        },
+        "invoice_number": "mock_invoice_number1"
+      }
+    ]
+  },
+  "store_info": {},
+  "auction_info": {},
+  "incentive_info": {}
+},
+{
+"transaction_info": {
+"transaction_id": "0DEKFLRKCKRN555",
+"paypal_reference_id": "XXX222333DEDEDE",
+"paypal_reference_id_type": "TXN",
+"transaction_event_code": "T0300",
+"transaction_initiation_date": "2021-02-06T12:21:14+0000",
+"transaction_updated_date": "2021-02-06T12:21:14+0000",
+"transaction_amount": {
+"currency_code": "EUR",
+"value": "9.83"
+},
+"transaction_status": "S",
+"bank_reference_id": "10000222444",
+"ending_balance": {
+"currency_code": "EUR",
+"value": "0.00"
+},
+"available_balance": {
+"currency_code": "EUR",
+"value": "0.00"
+},
+"invoice_id": "mock_invoice_id",
+"custom_field": "IE",
+"protection_eligibility": "02"
+},
+"payer_info": {
+"phone_number": {
+"country_code": "353",
+"national_number": "1212122"
+},
+"address_status": "N",
+"payer_name": {},
+"address": {
+"line1": "mock_line1",
+"line2": "mock_line2",
+"city": "mock_city",
+"country_code": "mock_country_code",
+"postal_code": "mock_postal_code"
+}
+},
+"shipping_info": {},
+"cart_info": {
+"item_details": [
+{
+"item_quantity": "1.000",
+"invoice_number": "mock_invoice_number"
+}
+]
+},
+"store_info": {},
+"auction_info": {},
+"incentive_info": {}
+}
+],
+"account_number": "mock_account_number",
+"start_date": "2021-02-01T00:00:00-00:00",
+"end_date": "2021-02-13T23:59:59-00:00",
+"last_refreshed_datetime": "2021-02-13T15:29:59+0000",
+"page": 1,
+"total_items": 2,
+"total_pages": 1,
+"links": [
+{
+"href": "https://api.paypal.com/v1/reporting/transactions/mock",
+"rel": "self",
+"method": "GET"
+}
+]
+}
