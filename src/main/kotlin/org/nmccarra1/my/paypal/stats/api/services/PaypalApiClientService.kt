@@ -2,9 +2,7 @@ package org.nmccarra1.my.paypal.stats.api.services
 
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.authentication
-import org.nmccarra1.my.paypal.stats.api.AppKt.Companion.logger
 import org.nmccarra1.my.paypal.stats.api.models.*
-import org.nmccarra1.my.paypal.stats.api.models.UnsuccessfulMessages.UNAUTHORIZED_ACCESS_TOKEN
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,7 +16,7 @@ class PaypalAPIClientService (
     private val tokenURL = "${config.paypalApi.url}/${config.paypalApi.tokenPath}"
     private val transactionsURL = "${config.paypalApi.url}/${config.paypalApi.transactionsPath}"
 
-    fun getAccessToken(credentials: AccessTokenCredentials): ResponseEntity<AccessTokenResponse> {
+    fun getAccessToken(credentials: AccessTokenCredentials): ResponseEntity<Any> {
         val (_, httpResponse, apiResult) = Fuel.post(tokenURL)
             .header(mapOf("Content-Type" to "application/x-www-form-urlencoded"))
             .authentication()
@@ -27,18 +25,16 @@ class PaypalAPIClientService (
             .responseObject(Oauth2TokenResponseDeserializer)
         val payload = apiResult.fold(
             success = {
-                logger.info { "${httpResponse.statusCode} ${httpResponse.responseMessage} - api/token: Access token retrieved." }
                 AccessTokenResponse(accessToken = it.accessToken) },
             failure = {
-                logger.error { "${httpResponse.statusCode} ${httpResponse.responseMessage} - api/token: ${UNAUTHORIZED_ACCESS_TOKEN.error}" }
-                throw UnauthorisedException()
+                UnsuccessfulMessage(error = it.response.responseMessage, additionalInfo = it.localizedMessage)
             }
         )
         return ResponseEntity(payload, HttpStatus.valueOf(httpResponse.statusCode))
     }
 
     fun getTransactionsWithAccessToken(transactionsRequestWithAccessToken:
-                                       TransactionsRequestWithAccessToken) : ResponseEntity<List<TransactionsSearchParsedResponse?>> {
+                                       TransactionsRequestWithAccessToken) : ResponseEntity<Any> {
         val (_, httpResponse, apiResult) = Fuel.get(transactionsURL, transactionsRequestWithAccessToken.parameterPairList())
             .header(mapOf("Content-Type" to "application/json"))
             .authentication()
@@ -48,10 +44,7 @@ class PaypalAPIClientService (
             success = {
                 it.toPaypalTransactionSearchParsedResponse()
             },
-            failure = {
-                // TODO: Add Error handling
-                logger.error { it.exception }
-                throw Exception()
+            failure = { UnsuccessfulMessage(error = it.response.responseMessage, additionalInfo = it.localizedMessage)
             }
         )
         return ResponseEntity(payload, HttpStatus.valueOf(httpResponse.statusCode))

@@ -61,7 +61,6 @@ internal class AccessTokenControllerTest @Autowired constructor(
             .andExpect {
                 status { isUnauthorized }
                 content { contentType(MediaType.APPLICATION_JSON) }
-                jsonPath("$.error", equalTo("Invalid credentials provided. Please try again."))
             }
     }
 }
