@@ -10,11 +10,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class PaypalAPIClientService (
-    @Autowired private val configService: ConfigService
+    @Autowired private val configuration: Configuration
 ) {
-    private val config: Configuration = configService.configuration
-    private val tokenURL = "${config.paypalApi.url}/${config.paypalApi.tokenPath}"
-    private val transactionsURL = "${config.paypalApi.url}/${config.paypalApi.transactionsPath}"
+    private val tokenURL = "${configuration.paypal.url}/${configuration.paypal.tokenPath}"
+    private val transactionsURL = "${configuration.paypal.url}/${configuration.paypal.transactionsPath}"
 
     fun getAccessToken(credentials: AccessTokenCredentials): ResponseEntity<Any> {
         val (_, httpResponse, apiResult) = Fuel.post(tokenURL)
