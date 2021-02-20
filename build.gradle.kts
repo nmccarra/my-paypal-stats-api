@@ -31,6 +31,7 @@ object V {
     const val kotlinLogging = "1.7.8"
     const val mockk = "1.9.3"
     const val mockServer = "3.10.8"
+    const val logBook = "2.5.0"
 }
 
 dependencies {
@@ -44,6 +45,8 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:${V.jackson}")
     implementation("org.junit.jupiter:junit-jupiter:5.4.2")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.zalando:logbook-spring-boot-starter:${V.logBook}")
+    implementation("org.zalando:logbook-core:${V.logBook}")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mock-server:mockserver-netty:${V.mockServer}")
     testImplementation("org.mock-server:mockserver-client-java:${V.mockServer}")
