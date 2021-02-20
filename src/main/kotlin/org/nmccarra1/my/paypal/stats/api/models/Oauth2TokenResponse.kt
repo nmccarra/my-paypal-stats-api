@@ -11,7 +11,7 @@ import com.github.kittinunf.fuel.core.ResponseDeserializable
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
 data class Oauth2TokenResponse(val accessToken: String?)
 
-object Oauth2TokenResponseDeserializer: ResponseDeserializable<Oauth2TokenResponse> {
+object Oauth2TokenResponseDeserializer : ResponseDeserializable<Oauth2TokenResponse> {
     private val mapper = jacksonObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     override fun deserialize(content: String): Oauth2TokenResponse =

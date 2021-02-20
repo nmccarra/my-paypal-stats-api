@@ -7,12 +7,13 @@ plugins {
     id("application")
     id("java")
     kotlin("kapt") version "1.3.61"
+    id("org.jlleitschuh.gradle.ktlint") version "9.3.0"
 }
 
 group = "org.nmccarra1"
 
 application {
-     mainClassName = "org.nmccarra1.my.paypal.stats.api.AppKt"
+    mainClassName = "org.nmccarra1.my.paypal.stats.api.AppKt"
 }
 
 repositories {
@@ -25,7 +26,7 @@ java {
 }
 
 object V {
-    const val kotlin  = "1.3.72"
+    const val kotlin = "1.3.72"
     const val fuel = "2.2.0"
     const val jackson = "2.11.1"
     const val kotlinLogging = "1.7.8"

@@ -8,6 +8,5 @@ class AppKtTest {
 
     @Test
     fun contextLoads() {
-
     }
 }

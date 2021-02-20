@@ -7,7 +7,8 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConfigurationProperties(prefix = "app")
 data class Configuration(
     val version: String = System.getenv("APP_VERSION") ?: "0.0.0",
-    val paypal: Paypal) {
+    val paypal: Paypal
+) {
     data class Paypal(
         val url: String,
         val transactionsPath: String,

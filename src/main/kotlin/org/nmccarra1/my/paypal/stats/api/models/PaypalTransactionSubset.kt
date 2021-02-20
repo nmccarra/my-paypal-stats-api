@@ -7,7 +7,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-data class TransactionsSearchResponse (
+data class TransactionsSearchResponse(
     val transactionDetails: List<PaypalTransactionSubset?>,
     val totalItems: Int
 ) {
@@ -32,7 +32,7 @@ data class TransactionsSearchResponse (
     }
 }
 
-data class TransactionsSearchParsedResponse (
+data class TransactionsSearchParsedResponse(
     val transactionId: String,
     val transactionDate: String,
     val transactionType: String?,
@@ -40,17 +40,17 @@ data class TransactionsSearchParsedResponse (
     val payerName: String?,
     val items: List<String>,
     val transactionAmount: String
-    )
+)
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-data class PaypalTransactionSubset (
+data class PaypalTransactionSubset(
     val transactionInfo: TransactionInfo,
     val payerInfo: PayerInfo,
     val cartInfo: CartInfo
 )
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-data class TransactionInfo (
+data class TransactionInfo(
     val transactionId: String,
     val transactionInitiationDate: String,
     val paypalReferenceIdType: String?,
@@ -79,7 +79,7 @@ data class PayerName(
 data class CartInfo(
     val itemDetails: List<ItemInfo?>
 ) {
-    fun itemsList() : List<String> {
+    fun itemsList(): List<String> {
         return itemDetails.mapNotNull { it?.itemName }
     }
 }
@@ -89,7 +89,7 @@ data class ItemInfo(
     val itemName: String?
 )
 
-object TransactionsSearchResponseDeserializer: ResponseDeserializable<TransactionsSearchResponse> {
+object TransactionsSearchResponseDeserializer : ResponseDeserializable<TransactionsSearchResponse> {
     private val mapper = jacksonObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     override fun deserialize(content: String): TransactionsSearchResponse =

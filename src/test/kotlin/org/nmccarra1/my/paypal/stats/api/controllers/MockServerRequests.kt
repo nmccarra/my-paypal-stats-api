@@ -65,5 +65,4 @@ object MockTransactionSearchRequests {
                 .withDelay(TimeUnit.NANOSECONDS, 1)
         )
     }
-
 }

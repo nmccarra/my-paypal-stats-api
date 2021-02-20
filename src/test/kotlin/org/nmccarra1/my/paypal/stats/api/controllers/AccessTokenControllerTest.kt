@@ -2,7 +2,9 @@ package org.nmccarra1.my.paypal.stats.api.controllers
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.hamcrest.CoreMatchers.equalTo
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockserver.integration.ClientAndServer
 import org.nmccarra1.my.paypal.stats.api.controllers.MockOauth2TokenRequests.oauth2TokenSuccess
 import org.nmccarra1.my.paypal.stats.api.controllers.MockOauth2TokenRequests.oauth2TokenUnauthorised
@@ -21,17 +23,16 @@ internal class AccessTokenControllerTest @Autowired constructor(
 ) {
     val clientAndServer = ClientAndServer(1080)
 
-        @BeforeEach
-        fun setUp() {
-            oauth2TokenSuccess(clientAndServer)
-            oauth2TokenUnauthorised(clientAndServer)
+    @BeforeEach
+    fun setUp() {
+        oauth2TokenSuccess(clientAndServer)
+        oauth2TokenUnauthorised(clientAndServer)
+    }
 
-        }
-
-        @AfterEach
-        fun tearDown() {
-            clientAndServer.stop()
-        }
+    @AfterEach
+    fun tearDown() {
+        clientAndServer.stop()
+    }
 
     @Test
     fun `should return SUCESS when an access token has been retrieved`() {
