@@ -3,6 +3,7 @@ package org.nmccarra1.my.paypal.stats.api.controllers
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
+import org.nmccarra1.my.paypal.stats.api.models.TransactionsByPayeeName
 import org.nmccarra1.my.paypal.stats.api.models.UnsuccessfulMessage
 import org.nmccarra1.my.paypal.stats.api.models.TransactionsRequestWithAccessToken
 import org.nmccarra1.my.paypal.stats.api.services.PaypalApiClientService
@@ -51,4 +52,8 @@ class TransactionsSearchController(val paypalApiClientService: PaypalApiClientSe
     @PostMapping
     fun retrieveTransactions(@RequestBody transactionsRequestWithAccessToken: TransactionsRequestWithAccessToken) =
         paypalApiClientService.getTransactionsWithAccessToken(transactionsRequestWithAccessToken)
+
+    @PostMapping("/payeeName")
+    fun retrieveTransactionsByPayeeName(@RequestBody transactionsByPayeeName: TransactionsByPayeeName) =
+        paypalApiClientService.getTransactionsByPayeeName(transactionsByPayeeName)
 }

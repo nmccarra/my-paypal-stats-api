@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.kittinunf.fuel.core.ResponseDeserializable
+import java.util.Date
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
 data class TransactionsSearchResponse(
@@ -40,6 +41,20 @@ data class TransactionsSearchParsedResponse(
     val payerName: String?,
     val items: List<String>,
     val transactionAmount: String
+)
+
+data class TransactionsSearchByPayeeNameResponse(
+    val payeeName: String,
+    val transactionsCount: Int,
+    val transactionSums: TransactionSums,
+    val startDate: Date,
+    val endDate: Date,
+    val transactions: List<TransactionsSearchParsedResponse?>
+)
+
+data class TransactionSums(
+    val prePaid: Double = 0.0,
+    val standard: Double = 0.0
 )
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)

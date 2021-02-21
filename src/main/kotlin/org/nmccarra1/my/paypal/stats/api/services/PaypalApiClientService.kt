@@ -5,7 +5,12 @@ import com.github.kittinunf.fuel.core.extensions.authentication
 import org.nmccarra1.my.paypal.stats.api.models.AccessTokenCredentials
 import org.nmccarra1.my.paypal.stats.api.models.AccessTokenResponse
 import org.nmccarra1.my.paypal.stats.api.models.Oauth2TokenResponseDeserializer
+import org.nmccarra1.my.paypal.stats.api.models.TransactionSums
+import org.nmccarra1.my.paypal.stats.api.models.TransactionsByPayeeName
 import org.nmccarra1.my.paypal.stats.api.models.TransactionsRequestWithAccessToken
+import org.nmccarra1.my.paypal.stats.api.models.TransactionsSearchByPayeeNameResponse
+import org.nmccarra1.my.paypal.stats.api.models.TransactionsSearchParsedResponse
+import org.nmccarra1.my.paypal.stats.api.models.TransactionsSearchResponse
 import org.nmccarra1.my.paypal.stats.api.models.TransactionsSearchResponseDeserializer
 import org.nmccarra1.my.paypal.stats.api.models.UnsuccessfulMessage
 import org.springframework.beans.factory.annotation.Autowired
@@ -53,5 +58,64 @@ class PaypalApiClientService(
             }
         )
         return ResponseEntity(payload, HttpStatus.valueOf(httpResponse.statusCode))
+    }
+
+    fun getTransactionsByPayeeName(transactionsByPayeeName: TransactionsByPayeeName): ResponseEntity<Any> {
+        val (_, httpResponse, apiResult) = Fuel.get(
+            transactionsURL,
+            transactionsByPayeeName.toTransactionsRequestWithAccessToken().parameterPairList()
+        )
+            .header(mapOf("Content-Type" to "application/json"))
+            .authentication()
+            .bearer(transactionsByPayeeName.accessToken)
+            .responseObject(TransactionsSearchResponseDeserializer)
+        val payload = apiResult.fold(
+            success = {
+                reduceToPayeeRelatedTransactions(transactionsByPayeeName, it)
+            },
+            failure = {
+                UnsuccessfulMessage(error = it.response.responseMessage, additionalInfo = it.localizedMessage)
+            }
+        )
+        return ResponseEntity(payload, HttpStatus.valueOf(httpResponse.statusCode))
+    }
+
+    fun reduceToPayeeRelatedTransactions(transactionsByPayeeName: TransactionsByPayeeName, response: TransactionsSearchResponse): TransactionsSearchByPayeeNameResponse {
+        val transactions = response.toPaypalTransactionSearchParsedResponse()
+            .filter {
+                it?.payerName?.toLowerCase()?.contains(transactionsByPayeeName.payeeName.toLowerCase())
+                    ?: false
+            }
+
+        return TransactionsSearchByPayeeNameResponse(
+            payeeName = transactionsByPayeeName.payeeName,
+            transactionsCount = transactions.size,
+            transactionSums = getTransactionSums(transactions),
+            startDate = transactionsByPayeeName.startDate,
+            endDate = transactionsByPayeeName.endDate,
+            transactions = transactions
+        )
+    }
+
+    fun getTransactionSums(transactions: List<TransactionsSearchParsedResponse?>): TransactionSums {
+        return TransactionSums(
+            prePaid = transactions.filter {
+                PREPAID_EVENT_CODES.contains(it?.transactionEventCode)
+            }
+                .sumByDouble {
+                    it?.transactionAmount?.toDoubleOrNull() ?: 0.0
+                },
+            standard = transactions.filter {
+                STANDARD_EVENT_CODES.contains(it?.transactionEventCode)
+            }
+                .sumByDouble {
+                    it?.transactionAmount?.toDoubleOrNull() ?: 0.0
+                }
+        )
+    }
+
+    companion object {
+        val PREPAID_EVENT_CODES = listOf<String>("T0003")
+        val STANDARD_EVENT_CODES = listOf<String>("T0300", "T0006", "T0700")
     }
 }

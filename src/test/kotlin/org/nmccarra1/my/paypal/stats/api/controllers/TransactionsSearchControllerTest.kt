@@ -51,13 +51,13 @@ internal class TransactionsSearchControllerTest @Autowired constructor(
                 jsonPath("$[0].items", equalTo(listOf<String>()))
                 jsonPath("$[0].transactionAmount", equalTo("-9.83"))
 
-                jsonPath("$[1].transactionId", equalTo("0DEKFLRKCKRN555"))
-                jsonPath("$[1].transactionDate", equalTo("2021-02-06T12:21:14+0000"))
-                jsonPath("$[1].transactionType", equalTo("TXN"))
-                jsonPath("$[1].transactionEventCode", equalTo("T0300"))
-                jsonPath("$[1].payerName", equalTo(null))
-                jsonPath("$[1].items", equalTo(listOf<String>()))
-                jsonPath("$[1].transactionAmount", equalTo("9.83"))
+                jsonPath("$[2].transactionId", equalTo("0DEKFLRKCKRN555"))
+                jsonPath("$[2].transactionDate", equalTo("2021-02-06T12:21:14+0000"))
+                jsonPath("$[2].transactionType", equalTo("TXN"))
+                jsonPath("$[2].transactionEventCode", equalTo("T0300"))
+                jsonPath("$[2].payerName", equalTo(null))
+                jsonPath("$[2].items", equalTo(listOf<String>()))
+                jsonPath("$[2].transactionAmount", equalTo("9.83"))
             }
     }
 
@@ -77,6 +77,26 @@ internal class TransactionsSearchControllerTest @Autowired constructor(
                 content { contentType(MediaType.APPLICATION_JSON) }
 
                 jsonPath("$.additionalInfo", equalTo("Cannot deserialize value of type `java.util.Date` from String \"2021-02-\": expected format \"yyyy-MM-dd\""))
+            }
+    }
+
+    @Test
+    fun `should return SUCCESS when the transaction search by payee response is received and parsed correctly`() {
+        val request = "{\"accessToken\":\"success_access_token\",\"payeeName\":\"Spotify\",\"startDate\":\"2021-02-01\",\"endDate\":\"2021-02-13\"}"
+
+        mockMvc.post("/api/paypal/transactions-search/payeeName") {
+            contentType = MediaType.APPLICATION_JSON
+            content = request
+        }
+            .andDo { println() }
+            .andExpect {
+                status { isOk }
+                content { contentType(MediaType.APPLICATION_JSON) }
+
+                jsonPath("$.payeeName", equalTo("Spotify"))
+                jsonPath("$.transactionsCount", equalTo(2))
+                jsonPath("$.transactionSums.prePaid", equalTo(-19.66))
+                jsonPath("$.transactionSums.standard", equalTo(0.0))
             }
     }
 }
